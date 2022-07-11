@@ -3,6 +3,7 @@ import React from 'react'
 import { UserIcon, ChevronDownIcon, SearchIconm, AdjustmentsIcon, SearchIcon } from "react-native-heroicons/outline";
 import { SafeAreaView } from 'react-native-safe-area-context'; 
 import Categories from '../components/Categories';
+import FeaturedRow from '../components/FeaturedRow';
 
 
 const HomeScreen = () => {
@@ -63,6 +64,29 @@ const HomeScreen = () => {
                     <Categories/>
 
                 {/* featured */}
+
+                <FeaturedRow 
+                id="1"
+                    title="Featured"
+                    description = "paid placements from our partners"
+                    featuredCategory ="featured"
+                />
+
+                {/* tasty discounts */}
+                 <FeaturedRow 
+                id="2"
+                    title="Featured"
+                    description = "paid placements from our partners"
+                    featuredCategory ="featured"
+                /> 
+
+                {/* offers near you */}'
+                 <FeaturedRow 
+                id="3"
+                    title="Featured"
+                    description = "paid placements from our partners"
+                    featuredCategory ="featured"
+                />
 
             </ScrollView>
 
