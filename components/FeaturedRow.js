@@ -1,9 +1,32 @@
 import { View, Text } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { ArrowRightIcon } from 'react-native-heroicons/outline'
 import RestaurantCard from './RestaurantCard'
-
+import sanityCLient from "../sanity";
 const FeaturedRow = ({id, title, description}) => {
+    const [restaurants, setRestaurants] = useState([]);
+
+
+  useEffect(() =>{
+    // console.log(id)
+    sanityCLient.fetch(`*[_type == "featured" && id = $id]{
+      ...,
+      restaurants[] -> {
+        ...,
+        dishes[] ->,
+        type-> {
+          name
+        }
+      },
+    }[0]
+
+    `,{id})
+    .then(data => {
+      setRestaurants(data?.restaurants);
+    })
+
+  },[])
+
   return (
     <View>
       <View className = "mt-4 flex-row items-center justify-between px-4">
@@ -22,44 +45,26 @@ const FeaturedRow = ({id, title, description}) => {
         className="pt-4"
         >
             {/* Restaurant Cards */}
-            <RestaurantCard 
-             id = {123}
-             imgUrl = 'https://picsum.photos/id/237/200/300'
-             title = 'Restaurant 1'
-             rating = {4.5}
-             genre = 'Chinese'
-             address = '123 Main St'
-             short_description= 'This is a short description'
-             dishes = 'Dishes'
-             long = {-122.4}
-             lat=   {37.7}
-            />
+            {restaurants.map(restaurant => (
+              <RestaurantCard 
+              key={restaurant.id} 
+              id={restaurant.id}
+              name={restaurant.name}
+              title={restaurant.title}
+              short_description={restaurant.short_description}
+              imgUrl={restaurant.image}
+              type={restaurant.type}
+              dishes={restaurant.dishes}
+              rating={restaurant.rating}
+              long = {restaurant.lon}
+              lat = {restaurant.lat}
+              genre = {restaurant.genre}
+              address = {restaurant.address}
+              // restaurant={restaurant} 
+              />
 
-            <RestaurantCard 
-             id = {123}
-             imgUrl = 'https://picsum.photos/id/237/200/300'
-             title = 'Restaurant 1'
-             rating = {4.5}
-             genre = 'Chinese'
-             address = '123 Main St'
-             short_description= 'This is a short description'
-             dishes = 'Dishes'
-             long = {-122.4}
-             lat=   {37.7}
-            />
-
-            <RestaurantCard 
-             id = {123}
-             imgUrl = 'https://picsum.photos/id/237/200/300'
-             title = 'Restaurant 1'
-             rating = {4.5}
-             genre = 'Chinese'
-             address = '123 Main St'
-             short_description= 'This is a short description'
-             dishes = 'Dishes'
-             long = {-122.4}
-             lat=   {37.7}
-            />
+            ))}
+            
         </ScrollView>
 
     </View>

@@ -4,10 +4,12 @@ import { UserIcon, ChevronDownIcon, SearchIconm, AdjustmentsIcon, SearchIcon } f
 import { SafeAreaView } from 'react-native-safe-area-context'; 
 import Categories from '../components/Categories';
 import FeaturedRow from '../components/FeaturedRow';
-
+import sanitClient from "../sanity";
+import { useEffect } from 'react';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
+  const [featuredCategories, setFeaturedCategories] = useState([]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -15,6 +17,24 @@ const HomeScreen = () => {
         
     });
 }, []);
+
+    
+useEffect(() => {
+    sanityClient.fetch(`
+    
+    *[_type == "featured"]{
+        ...,
+        restaurants[] -> {
+            ...,
+            dishes[] -> 
+        }
+        
+     } `).then(data => {
+        setFeaturedCategories(data);
+     })
+    },[]);
+
+
   return (
     <SafeAreaView className='bg-white pt-5'>
       
@@ -65,34 +85,17 @@ const HomeScreen = () => {
 
                 {/* featured */}
 
-                <FeaturedRow 
-                id="1"
-                    title="Featured"
-                    description = "paid placements from our partners"
-                    featuredCategory ="featured"
-                />
-
-                {/* tasty discounts */}
-                 <FeaturedRow 
-                id="2"
-                    title="Featured"
-                    description = "paid placements from our partners"
-                    featuredCategory ="featured"
-                /> 
-
-                {/* offers near you */}'
-                 <FeaturedRow 
-                id="3"
-                    title="Featured"
-                    description = "paid placements from our partners"
-                    featuredCategory ="featured"
-                />
-
+                {featuredCategories?.map(category => (
+                    <FeaturedRow 
+                    key={category._id} 
+                    id={category._id}
+                    category={category}
+                    description={category.short_description} 
+                    
+                    />
+                ))}
+  
             </ScrollView>
-
-       
-
-      
 
     </SafeAreaView>
   )

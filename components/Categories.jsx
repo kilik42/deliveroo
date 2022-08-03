@@ -2,8 +2,16 @@
 import { View, Text, ScrollView } from 'react-native'
 import React from 'react'
 import CategoryCard from './CategoryCard'
-
+import sanityClient from "../sanity";
 const Categories = () => {
+
+  const [categories, setCategories] = useState([]);
+
+  useEffect(()=>{
+    sanityClient.fetch(`
+      
+    `)
+  },[])
   return (
     <ScrollView 
     
